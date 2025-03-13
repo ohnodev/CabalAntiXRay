@@ -41,7 +41,7 @@ public abstract class PalettedContainer$DataMixin<T> {
             chunkPacketInfo.setBits(chunkSectionIndex, storage.getBits());
             //noinspection unchecked
             chunkPacketInfo.setPalette(chunkSectionIndex, (Palette<BlockState>) this.palette);
-            chunkPacketInfo.setIndex(chunkSectionIndex, buf.writerIndex() + VarInt.getByteSize(storage.getRaw().length));
+            chunkPacketInfo.setIndex(chunkSectionIndex, buf.writerIndex());
         }
         return original.call(storage);
     }

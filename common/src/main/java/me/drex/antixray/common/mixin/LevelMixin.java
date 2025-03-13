@@ -1,5 +1,6 @@
 package me.drex.antixray.common.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import me.drex.antixray.common.config.WorldConfig;
 import me.drex.antixray.common.interfaces.ILevel;
 import me.drex.antixray.common.util.controller.ChunkPacketBlockController;
@@ -51,11 +52,10 @@ public abstract class LevelMixin implements ILevel, LevelAccessor {
         method = "setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;II)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/level/chunk/LevelChunk;setBlockState(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)Lnet/minecraft/world/level/block/state/BlockState;"
-        ),
-        locals = LocalCapture.CAPTURE_FAILHARD
+            target = "Lnet/minecraft/world/level/chunk/LevelChunk;setBlockState(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Lnet/minecraft/world/level/block/state/BlockState;"
+        )
     )
-    public void onBlockChange(final BlockPos blockPos, final BlockState blockState, final int flags, final int maxUpdateDepth, final CallbackInfoReturnable<Boolean> cir, final LevelChunk levelChunk) {
+    public void onBlockChange(final BlockPos blockPos, final BlockState blockState, final int flags, final int maxUpdateDepth, final CallbackInfoReturnable<Boolean> cir, @Local final LevelChunk levelChunk) {
         if ((Object) this instanceof ServerLevel serverLevel) {
             final BlockState oldState = levelChunk.getBlockState(blockPos);
             this.chunkPacketBlockController.onBlockChange(serverLevel, blockPos, blockState, oldState, flags, maxUpdateDepth);
