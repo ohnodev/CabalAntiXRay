@@ -16,7 +16,7 @@ configurations {
 }
 
 repositories {
-    maven { url 'https://jitpack.io' } // imm_ptl_core
+    maven { url 'https://jitpack.io' } // ImmersivePortalsMod
 }
 
 dependencies {
@@ -29,10 +29,11 @@ dependencies {
 
     runtimeOnly(include("com.moandjiezana.toml:toml4j:${project.toml_version}"))
 
-    modCompileOnly("com.github.iPortalTeam.ImmersivePortalsMod:imm_ptl_core:${project.fabric_imm_ptl_core_version}") {
+    modCompileOnly("com.github.iPortalTeam:ImmersivePortalsMod:${project.fabric_imm_ptl_core_version}") {
         exclude(group: "net.fabricmc.fabric-api")
         transitive(false)
     }
+
     include(modImplementation("me.lucko:fabric-permissions-api:${project.fabric_permission_api_version}"))
 }
 
