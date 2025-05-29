@@ -4,6 +4,7 @@ import com.google.common.collect.Queues;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
 import me.drex.antixray.common.util.Util;
 import net.minecraft.network.Connection;
 import net.minecraft.network.PacketSendListener;
@@ -28,7 +29,7 @@ public abstract class ConnectionMixin {
     private Queue<Consumer<Connection>> pendingActions;
 
     @Shadow
-    protected abstract void sendPacket(Packet<?> $$0, PacketSendListener $$1, boolean $$2);
+    protected abstract void sendPacket(Packet<?> $$0, ChannelFutureListener $$1, boolean $$2);
 
     /**
      * @author Drex
@@ -48,13 +49,13 @@ public abstract class ConnectionMixin {
     }
 
     @Redirect(
-        method = "send(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketSendListener;Z)V",
+        method = "send(Lnet/minecraft/network/protocol/Packet;Lio/netty/channel/ChannelFutureListener;Z)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/network/Connection;sendPacket(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketSendListener;Z)V"
+            target = "Lnet/minecraft/network/Connection;sendPacket(Lnet/minecraft/network/protocol/Packet;Lio/netty/channel/ChannelFutureListener;Z)V"
         )
     )
-    public void redirectSendPacket(Connection instance, Packet<?> packet, PacketSendListener listener, boolean flush) {
+    public void redirectSendPacket(Connection instance, Packet<?> packet, ChannelFutureListener listener, boolean flush) {
         if (this.antiXray$isActionReady.isEmpty() && Util.isReady(packet)) {
             this.sendPacket(packet, listener, flush);
         } else {
@@ -66,7 +67,7 @@ public abstract class ConnectionMixin {
     }
 
     @WrapOperation(
-        method = "send(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketSendListener;Z)V",
+        method = "send(Lnet/minecraft/network/protocol/Packet;Lio/netty/channel/ChannelFutureListener;Z)V",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Queue;add(Ljava/lang/Object;)Z"
