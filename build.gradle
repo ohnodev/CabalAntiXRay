@@ -140,7 +140,7 @@ publishMods {
 
     github {
         accessToken = providers.environmentVariable("GITHUB_TOKEN")
-        repository = providers.environmentVariable("GITHUB_REPOSITORY").getOrElse("DrexHD/dryrun")
+        repository = providers.environmentVariable("GITHUB_REPOSITORY").getOrElse("DrexHD/AntiXray")
         commitish = providers.environmentVariable("GITHUB_REF_NAME").getOrElse("dryrun")
         // Workaround for https://github.com/modmuss50/mod-publish-plugin/issues/29
         githubFiles.each {
