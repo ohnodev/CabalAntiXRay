@@ -6,6 +6,8 @@ import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 
+import java.util.List;
+
 /**
  * Some of these arguments are used by multiple methods. This allows them to be accessed by all called methods, but
  * may cause them to be present 'unexpectedly'.
@@ -17,6 +19,7 @@ public class Arguments {
     public static final ThreadLocal<Object[]> PRESET_VALUES = new ThreadLocal<>();
     public static final ThreadLocal<IClientboundChunkBatchStartPacket> BATCH_START_PACKET = new ThreadLocal<>();
     public static final ThreadLocal<ServerGamePacketListenerImpl> PACKET_LISTENER = new ThreadLocal<>();
+    public static final ThreadLocal<List<?>> PALETTE_ENTRIES = new ThreadLocal<>();
     public static final ThreadLocal<LevelHeightAccessor> SerializableChunkData_LEVEL_HEIGHT_ACCESSOR = new ThreadLocal<>();
     public static final ThreadLocal<Integer> SerializableChunkData_SECTION_INDEX = new ThreadLocal<>();
 }

@@ -5,6 +5,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.PaletteResize;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -30,7 +31,7 @@ public class ObfuscateChunkPacketBlockController extends ChunkPacketBlockControl
         presetBlockStateBitsGlobal = new int[presetBlockStates.length];
 
         for (int i = 0; i < presetBlockStates.length; i++) {
-            presetBlockStateBitsGlobal[i] = GLOBAL_BLOCKSTATE_PALETTE.idFor(presetBlockStates[i]);
+            presetBlockStateBitsGlobal[i] = GLOBAL_BLOCKSTATE_PALETTE.idFor(presetBlockStates[i], PaletteResize.noResizeExpected());
         }
     }
 

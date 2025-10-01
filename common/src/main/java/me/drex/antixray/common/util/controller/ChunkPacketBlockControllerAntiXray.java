@@ -220,7 +220,7 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
                     for (int i = 0; i < presetBlockStateBits.length; i++) {
                         // This is thread safe because we only request IDs that are guaranteed to be in the palette and are visible
                         // For more details see the comments in the readPalette method
-                        presetBlockStateBits[i] = chunkPacketInfoAntiXray.getPalette(chunkSectionIndex).idFor(presetBlockStates[i]);
+                        presetBlockStateBits[i] = chunkPacketInfoAntiXray.getPalette(chunkSectionIndex).idFor(presetBlockStates[i], PaletteResize.noResizeExpected());
                     }
                 }
 

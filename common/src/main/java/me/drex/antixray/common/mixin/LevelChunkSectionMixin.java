@@ -6,32 +6,27 @@ import me.drex.antixray.common.util.Arguments;
 import me.drex.antixray.common.util.Util;
 import me.drex.antixray.common.util.controller.ChunkPacketBlockController;
 import net.minecraft.core.Holder;
-import net.minecraft.core.IdMap;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.LevelChunkSection;
-import net.minecraft.world.level.chunk.PalettedContainer;
-import net.minecraft.world.level.chunk.PalettedContainerRO;
+import net.minecraft.world.level.chunk.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(LevelChunkSection.class)
 public abstract class LevelChunkSectionMixin {
     @WrapOperation(
-        method = "<init>(Lnet/minecraft/core/Registry;)V",
+        method = "<init>(Lnet/minecraft/world/level/chunk/PalettedContainerFactory;)V",
         at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/core/IdMap;Ljava/lang/Object;Lnet/minecraft/world/level/chunk/PalettedContainer$Strategy;)Lnet/minecraft/world/level/chunk/PalettedContainer;",
-            ordinal = 0
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/level/chunk/PalettedContainerFactory;createForBlockStates()Lnet/minecraft/world/level/chunk/PalettedContainer;"
         )
     )
-    public PalettedContainer<BlockState> setPresetValuesArgument(IdMap<BlockState> idMap, Object defaultValue, PalettedContainer.Strategy strategy, Operation<PalettedContainer<BlockState>> original) {
+    public PalettedContainer<BlockState> setPresetValuesArgument(PalettedContainerFactory instance, Operation<PalettedContainer<BlockState>> original) {
         if (((Object) this).getClass() != LevelChunkSection.class) {
             // Compatibility with Flywheel's VirtualChunkSection
-            return original.call(idMap, defaultValue, strategy);
+            return original.call(instance);
         }
         // custom arguments
         ChunkAccess chunkAccess = Arguments.CHUNK_ACCESS.get();
@@ -44,27 +39,26 @@ public abstract class LevelChunkSectionMixin {
             var previous = Arguments.PRESET_VALUES.get();
             Arguments.PRESET_VALUES.set(presetValues);
             try {
-                return original.call(idMap, defaultValue, strategy);
+                return original.call(instance);
             } finally {
                 Arguments.PRESET_VALUES.set(previous);
             }
         }
-        return original.call(idMap, defaultValue, strategy);
+        return original.call(instance);
     }
 
     @WrapOperation(
-        method = "<init>(Lnet/minecraft/core/Registry;)V",
+        method = "<init>(Lnet/minecraft/world/level/chunk/PalettedContainerFactory;)V",
         at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/core/IdMap;Ljava/lang/Object;Lnet/minecraft/world/level/chunk/PalettedContainer$Strategy;)Lnet/minecraft/world/level/chunk/PalettedContainer;",
-            ordinal = 1
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/level/chunk/PalettedContainerFactory;createForBiomes()Lnet/minecraft/world/level/chunk/PalettedContainer;"
         )
     )
-    public PalettedContainer<BlockState> setPacketInfoArgumentNull(IdMap<BlockState> idMap, Object defaultValue, PalettedContainer.Strategy strategy, Operation<PalettedContainer<BlockState>> original) {
+    public PalettedContainer<Holder<Biome>> setPacketInfoArgumentNull(PalettedContainerFactory instance, Operation<PalettedContainer<Holder<Biome>>> original) {
         var previous = Arguments.PACKET_INFO.get();
         Arguments.PACKET_INFO.remove();
         try {
-            return original.call(idMap, defaultValue, strategy);
+            return original.call(instance);
         } finally {
             Arguments.PACKET_INFO.set(previous);
         }
