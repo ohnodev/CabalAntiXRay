@@ -17,6 +17,7 @@ configurations {
 
 repositories {
     maven { url 'https://jitpack.io' } // ImmersivePortalsMod
+    maven { url = 'https://maven.nucleoid.xyz/' }
 }
 
 dependencies {

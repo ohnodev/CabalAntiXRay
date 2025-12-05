@@ -36,7 +36,7 @@ public abstract class LevelMixin implements ILevel, LevelAccessor {
     @Override
     public void initValues() {
         if ((Object) this instanceof ServerLevel serverLevel) {
-            WorldConfig worldConfig = new WorldConfig(this.dimension.location());
+            WorldConfig worldConfig = new WorldConfig(this.dimension.identifier());
             this.chunkPacketBlockController = worldConfig.createChunkPacketBlockController(serverLevel);
         } else {
             throw new IllegalStateException();

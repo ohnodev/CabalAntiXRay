@@ -7,13 +7,15 @@ import me.drex.antixray.common.util.BitStorageReader;
 import me.drex.antixray.common.util.BitStorageWriter;
 import me.drex.antixray.common.util.ChunkPacketInfo;
 import me.drex.antixray.common.util.ChunkPacketInfoAntiXray;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.server.level.*;
+import net.minecraft.server.permissions.Permission;
+import net.minecraft.server.permissions.PermissionLevel;
+import net.minecraft.util.Util;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
@@ -76,7 +78,7 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
 
     @Override
     public boolean shouldModify(ServerPlayer player) {
-        return !this.usePermission || (!player.hasPermissions(2) && !AntiXray.INSTANCE.hasBypassPermission(player));
+        return !this.usePermission || (!player.permissions().hasPermission(new Permission.HasCommandLevel(PermissionLevel.GAMEMASTERS)) && !AntiXray.INSTANCE.hasBypassPermission(player));
     }
 
     @Override

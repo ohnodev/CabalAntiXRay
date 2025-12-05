@@ -10,7 +10,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class WorldConfig {
     public boolean enabled = false;
@@ -32,7 +31,7 @@ public class WorldConfig {
     public Set<Block> hiddenBlocks = new HashSet<>();
     public Set<Block> replacementBlocks = new HashSet<>();
 
-    public WorldConfig(ResourceLocation location) {
+    public WorldConfig(Identifier location) {
         Toml defaultToml = Config.toml;
         // Load default values
         this.loadValues(defaultToml);
@@ -81,7 +80,7 @@ public class WorldConfig {
                     isTag = true;
                     stringReader.skip();
                 }
-                ResourceLocation location = ResourceLocation.read(stringReader);
+                Identifier location = Identifier.read(stringReader);
                 if (isTag) {
                     TagKey<Block> tagKey = TagKey.create(Registries.BLOCK, location);
                     Optional<HolderSet.Named<Block>> optional = BuiltInRegistries.BLOCK.get(tagKey);
