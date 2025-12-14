@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.13] - 2025-12-14
+### Fixed
+- Soul Sand not being considered solid
+
 ## [1.4.12] - 2025-12-05
 ### Changed
 - Allow `updateRadius` config option to be set to higher than 2
