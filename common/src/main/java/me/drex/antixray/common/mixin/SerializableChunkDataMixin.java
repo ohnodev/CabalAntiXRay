@@ -64,7 +64,13 @@ public abstract class SerializableChunkDataMixin {
     }
 
     @WrapOperation(
-        method = "method_68291",
+        method = {
+            // neoforge
+            "lambda$parse$4",
+            // fabric
+            "method_68291"
+        },
+        require = 1,
         at = @At(
             value = "INVOKE",
             target = "Lcom/mojang/serialization/Codec;parse(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;"
