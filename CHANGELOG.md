@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.14] - 2026-03-12
+### Changed
+- Multiloader gradle setup
+
+### Fixed
+- Incorrect palette being used for fake ores in high density chunk section
+
 ## [1.4.13] - 2025-12-14
 ### Fixed
 - Soul Sand not being considered solid

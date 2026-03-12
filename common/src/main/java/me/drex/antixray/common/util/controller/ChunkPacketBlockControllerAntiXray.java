@@ -194,21 +194,24 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
         int maxChunkSectionIndex = Math.min((maxBlockHeight >> 4) - chunk.getMinSectionY(), chunk.getSectionsCount() - 1);
         bitStorageReader.setBuffer(chunkPacketInfoAntiXray.getBuffer());
         bitStorageWriter.setBuffer(chunkPacketInfoAntiXray.getBuffer());
-        int numberOfBlocks = presetBlockStateBits.length;
 
         for (int chunkSectionIndex = 0; chunkSectionIndex <= maxChunkSectionIndex; chunkSectionIndex++) {
             if (chunkPacketInfoAntiXray.isWritten(chunkSectionIndex) && chunkPacketInfoAntiXray.getPresetValues(chunkSectionIndex) != null) {
+                int[] presetBlockStateBitsTemp;
+
                 if (chunkPacketInfoAntiXray.getPalette(chunkSectionIndex) instanceof GlobalPalette) {
-                    presetBlockStateBits = getPresetBlockStateBits(level, (chunkSectionIndex + chunk.getMinSectionY()) << 4);
+                    presetBlockStateBitsTemp = getPresetBlockStateBits(level, (chunkSectionIndex + chunk.getMinSectionY()) << 4);
                 } else {
                     BlockState[] presetBlockStates = chunkPacketInfoAntiXray.getPresetValues(chunkSectionIndex);
+                    presetBlockStateBitsTemp = presetBlockStateBits;
 
-                    for (int i = 0; i < presetBlockStateBits.length; i++) {
+                    for (int i = 0; i < presetBlockStateBitsTemp.length; i++) {
                         // This is thread safe because we only request IDs that are guaranteed to be in the palette and are visible
                         // For more details see the comments in the readPalette method
-                        presetBlockStateBits[i] = chunkPacketInfoAntiXray.getPalette(chunkSectionIndex).idFor(presetBlockStates[i], PaletteResize.noResizeExpected());
+                        presetBlockStateBitsTemp[i] = chunkPacketInfoAntiXray.getPalette(chunkSectionIndex).idFor(presetBlockStates[i], PaletteResize.noResizeExpected());
                     }
                 }
+                int numberOfBlocks = presetBlockStateBitsTemp.length;
 
                 bitStorageWriter.setIndex(chunkPacketInfoAntiXray.getIndex(chunkSectionIndex));
 
@@ -232,7 +235,7 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
 
                     // Abuse the obfuscateLayer method to read the blocks of the first layer of the current chunk section
                     bitStorageWriter.setBits(0);
-                    obfuscateLayer(-1, bitStorageReader, bitStorageWriter, solid, obfuscate, presetBlockStateBits, current, next, nextNext, emptyNearbyChunkSections, layerIntSupplier(numberOfBlocks));
+                    obfuscateLayer(-1, bitStorageReader, bitStorageWriter, solid, obfuscate, presetBlockStateBitsTemp, current, next, nextNext, emptyNearbyChunkSections, layerIntSupplier(numberOfBlocks));
                 }
 
                 bitStorageWriter.setBits(chunkPacketInfoAntiXray.getBits(chunkSectionIndex));
@@ -247,7 +250,7 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
                     current = next;
                     next = nextNext;
                     nextNext = temp;
-                    obfuscateLayer(y, bitStorageReader, bitStorageWriter, solid, obfuscate, presetBlockStateBits, current, next, nextNext, nearbyChunkSections, layerIntSupplier(numberOfBlocks));
+                    obfuscateLayer(y, bitStorageReader, bitStorageWriter, solid, obfuscate, presetBlockStateBitsTemp, current, next, nextNext, nearbyChunkSections, layerIntSupplier(numberOfBlocks));
                 }
 
                 // Check if the chunk section above doesn't need obfuscation
@@ -272,7 +275,7 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
                         // There is nothing to read anymore
                         bitStorageReader.setBits(0);
                         solid[0] = true;
-                        obfuscateLayer(15, bitStorageReader, bitStorageWriter, solid, obfuscate, presetBlockStateBits, current, next, nextNext, nearbyChunkSections, layerIntSupplier(numberOfBlocks));
+                        obfuscateLayer(15, bitStorageReader, bitStorageWriter, solid, obfuscate, presetBlockStateBitsTemp, current, next, nextNext, nearbyChunkSections, layerIntSupplier(numberOfBlocks));
                     }
                 } else {
                     // If not, initialize the reader and other stuff for the chunk section above to obfuscate the upper layer of the current chunk section
@@ -284,7 +287,7 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
                     current = next;
                     next = nextNext;
                     nextNext = temp;
-                    obfuscateLayer(15, bitStorageReader, bitStorageWriter, solid, obfuscate, presetBlockStateBits, current, next, nextNext, nearbyChunkSections, layerIntSupplier(numberOfBlocks));
+                    obfuscateLayer(15, bitStorageReader, bitStorageWriter, solid, obfuscate, presetBlockStateBitsTemp, current, next, nextNext, nearbyChunkSections, layerIntSupplier(numberOfBlocks));
                 }
 
                 bitStorageWriter.flush();

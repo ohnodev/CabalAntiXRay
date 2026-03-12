@@ -21,6 +21,7 @@ dependencies {
 
     implementation(include("com.moandjiezana.toml:toml4j:${project.property("toml_version")}")!!)
     modImplementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_api_version")}")
 
     modCompileOnly("com.github.iPortalTeam:ImmersivePortalsMod:${project.property("fabric_imm_ptl_core_version")}") {
         exclude(group = "net.fabricmc.fabric-api")
