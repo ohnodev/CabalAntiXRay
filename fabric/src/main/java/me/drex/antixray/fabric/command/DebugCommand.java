@@ -31,7 +31,7 @@ public class DebugCommand {
                                     ServerLevel level = source.getLevel();
                                     Vec3 position = source.getPosition();
                                     BlockPos blockPos = BlockPos.containing(position);
-                                    ChunkPos chunkPos = new ChunkPos(blockPos);
+                                    ChunkPos chunkPos = ChunkPos.containing(blockPos);
 
                                     List<BlockState> blockStates = BuiltInRegistries.BLOCK.entrySet().stream().map(Map.Entry::getValue).flatMap(block -> block.getStateDefinition().getPossibleStates().stream()).toList();
                                     if (blockStateCount > blockStates.size()) {

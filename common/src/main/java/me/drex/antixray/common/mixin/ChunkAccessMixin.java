@@ -21,14 +21,7 @@ public abstract class ChunkAccessMixin {
         )
     )
     public void setChunkAccessInstanceArgument(PalettedContainerFactory palettedContainerFactory, LevelChunkSection[] chunkSections, Operation<Void> original) {
-        // set argument
-        var previous = Arguments.CHUNK_ACCESS.get();
-        Arguments.CHUNK_ACCESS.set((ChunkAccess) (Object) this);
-        try {
-            original.call(palettedContainerFactory, chunkSections);
-        } finally {
-            Arguments.CHUNK_ACCESS.set(previous);
-        }
+        ScopedValue.where(Arguments.CHUNK_ACCESS, (ChunkAccess) (Object) this).run(() -> original.call(palettedContainerFactory, chunkSections));
     }
 
     @WrapOperation(
@@ -39,17 +32,8 @@ public abstract class ChunkAccessMixin {
         )
     )
     private static LevelChunkSection setChunkSectionIndexArgument(PalettedContainerFactory palettedContainerFactory, Operation<LevelChunkSection> original, @Local int i) {
-        // custom arguments
         ChunkAccess thisChunkAccess = Arguments.CHUNK_ACCESS.get(); // simulate instance method
-
-        // set argument
-        var previous = Arguments.CHUNK_SECTION_INDEX.get();
-        Arguments.CHUNK_SECTION_INDEX.set(thisChunkAccess.levelHeightAccessor.getSectionYFromSectionIndex(i));
-        try {
-            return original.call(palettedContainerFactory);
-        } finally {
-            Arguments.CHUNK_SECTION_INDEX.set(previous);
-        }
+        return ScopedValue.where(Arguments.CHUNK_SECTION_INDEX, thisChunkAccess.levelHeightAccessor.getSectionYFromSectionIndex(i)).call(() -> original.call(palettedContainerFactory));
     }
 
 }

@@ -41,6 +41,14 @@ public abstract class PalettedContainerMixin<T> {
     @Final
     private Strategy<T> strategy;
 
+    @Unique
+    private void antiXray$initializePresetValues() {
+        if (Arguments.PRESET_VALUES.isBound()) {
+            //noinspection unchecked
+            this.antiXray$presetValues = (T[]) Arguments.PRESET_VALUES.get();
+        }
+    }
+
     @WrapOperation(
         method = "unpack",
         at = @At(
@@ -50,16 +58,9 @@ public abstract class PalettedContainerMixin<T> {
     )
     private static <T> PalettedContainer<T> addPaletteEntryListArgument(
         Strategy<T> strategy, Configuration configuration, BitStorage bitStorage, Palette<T> palette,
-        Operation<PalettedContainer<T>> original, @Local List<T> paletteEntries
+        Operation<PalettedContainer<T>> original, @Local(name = "paletteEntries") List<T> paletteEntries
     ) {
-        var previous = Arguments.PALETTE_ENTRIES.get();
-
-        try {
-            Arguments.PALETTE_ENTRIES.set(paletteEntries);
-            return original.call(strategy, configuration, bitStorage, palette);
-        } finally {
-            Arguments.PALETTE_ENTRIES.set(previous);
-        }
+        return ScopedValue.where(Arguments.PALETTE_ENTRIES, paletteEntries).call(() -> original.call(strategy, configuration, bitStorage, palette));
     }
 
     @Inject(
@@ -67,8 +68,8 @@ public abstract class PalettedContainerMixin<T> {
         at = @At("TAIL")
     )
     private void addPresetValuesWithEntries(Strategy<T> strategy, Configuration configuration, BitStorage bitStorage, Palette<T> palette, CallbackInfo ci) {
+        antiXray$initializePresetValues();
         //noinspection unchecked
-        this.antiXray$presetValues = (T[]) Arguments.PRESET_VALUES.get();
         List<T> paletteEntries = (List<T>) Arguments.PALETTE_ENTRIES.get();
 
         if (antiXray$presetValues != null
@@ -103,8 +104,7 @@ public abstract class PalettedContainerMixin<T> {
         at = @At("TAIL")
     )
     public void addPresetValuesInit(Object object, Strategy<T> strategy, CallbackInfo ci) {
-        //noinspection unchecked
-        this.antiXray$presetValues = (T[]) Arguments.PRESET_VALUES.get();
+        antiXray$initializePresetValues();
     }
 
     @Inject(
@@ -112,8 +112,7 @@ public abstract class PalettedContainerMixin<T> {
         at = @At("TAIL")
     )
     public void addPresetValuesInit(PalettedContainer<T> palettedContainer, CallbackInfo ci) {
-        //noinspection unchecked
-        this.antiXray$presetValues = (T[]) Arguments.PRESET_VALUES.get();
+        antiXray$initializePresetValues();
     }
 
     @Redirect(
@@ -174,13 +173,7 @@ public abstract class PalettedContainerMixin<T> {
         )
     )
     private PalettedContainer<T> addPresetValuesCopy(PalettedContainer<T> palettedContainer, Operation<PalettedContainer<T>> original) {
-        var previous = Arguments.PRESET_VALUES.get();
-        Arguments.PRESET_VALUES.set(antiXray$presetValues);
-        try {
-            return original.call(palettedContainer);
-        } finally {
-            Arguments.PRESET_VALUES.set(previous);
-        }
+        return ScopedValue.where(Arguments.PRESET_VALUES, antiXray$presetValues).call(() -> original.call(palettedContainer));
     }
 
     @WrapOperation(
@@ -191,13 +184,7 @@ public abstract class PalettedContainerMixin<T> {
         )
     )
     private PalettedContainer<T> addPresetValuesRecreate(Object object, Strategy<T> strategy, Operation<PalettedContainer<T>> original) {
-        var previous = Arguments.PRESET_VALUES.get();
-        Arguments.PRESET_VALUES.set(antiXray$presetValues);
-        try {
-            return original.call(object, strategy);
-        } finally {
-            Arguments.PRESET_VALUES.set(previous);
-        }
+        return ScopedValue.where(Arguments.PRESET_VALUES,  antiXray$presetValues).call(() -> original.call(object, strategy));
     }
 
     @Unique

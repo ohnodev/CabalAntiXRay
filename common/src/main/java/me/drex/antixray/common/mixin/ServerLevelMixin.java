@@ -37,7 +37,7 @@ public abstract class ServerLevelMixin extends Level implements ILevel {
     public void onInit(
         MinecraftServer minecraftServer, Executor executor, LevelStorageSource.LevelStorageAccess levelStorageAccess,
         ServerLevelData serverLevelData, ResourceKey resourceKey, LevelStem levelStem, boolean bl, long l, List list,
-        boolean bl2, RandomSequences randomSequences, CallbackInfo ci
+        boolean bl2, CallbackInfo ci
     ) {
         initValues();
     }

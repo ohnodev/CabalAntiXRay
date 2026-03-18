@@ -13,13 +13,11 @@ import java.util.List;
  * may cause them to be present 'unexpectedly'.
  */
 public class Arguments {
-    public static final ThreadLocal<ChunkPacketInfo<BlockState>> PACKET_INFO = new ThreadLocal<>();
-    public static final ThreadLocal<ChunkAccess> CHUNK_ACCESS = new ThreadLocal<>();
-    public static final ThreadLocal<Integer> CHUNK_SECTION_INDEX = new ThreadLocal<>();
-    public static final ThreadLocal<Object[]> PRESET_VALUES = new ThreadLocal<>();
-    public static final ThreadLocal<IClientboundChunkBatchStartPacket> BATCH_START_PACKET = new ThreadLocal<>();
-    public static final ThreadLocal<ServerGamePacketListenerImpl> PACKET_LISTENER = new ThreadLocal<>();
-    public static final ThreadLocal<List<?>> PALETTE_ENTRIES = new ThreadLocal<>();
-    public static final ThreadLocal<LevelHeightAccessor> SerializableChunkData_LEVEL_HEIGHT_ACCESSOR = new ThreadLocal<>();
-    public static final ThreadLocal<Integer> SerializableChunkData_SECTION_INDEX = new ThreadLocal<>();
+    public static final ScopedValue<ChunkPacketInfo<BlockState>> PACKET_INFO = ScopedValue.newInstance();
+    public static final ScopedValue<ChunkAccess> CHUNK_ACCESS = ScopedValue.newInstance();
+    public static final ScopedValue<Integer> CHUNK_SECTION_INDEX = ScopedValue.newInstance();
+    public static final ScopedValue<Object[]> PRESET_VALUES = ScopedValue.newInstance();
+    public static final ScopedValue<IClientboundChunkBatchStartPacket> BATCH_START_PACKET = ScopedValue.newInstance();
+    public static final ScopedValue<ServerGamePacketListenerImpl> PACKET_LISTENER = ScopedValue.newInstance();
+    public static final ScopedValue<List<?>> PALETTE_ENTRIES = ScopedValue.newInstance();
 }

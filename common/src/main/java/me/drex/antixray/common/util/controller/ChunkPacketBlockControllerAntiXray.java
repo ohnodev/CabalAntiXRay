@@ -110,8 +110,8 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
         }
 
         LevelChunk chunk = chunkPacketInfo.getChunk();
-        int x = chunk.getPos().x;
-        int z = chunk.getPos().z;
+        int x = chunk.getPos().x();
+        int z = chunk.getPos().z();
         ServerChunkCache chunkCache = ((ServerLevel) chunk.getLevel()).getChunkSource();
         antiXrayInfo.setNearbyChunks(
             getChunkAccess(chunkCache, x - 1, z),
@@ -123,7 +123,7 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
     }
 
     private ChunkAccess getChunkAccess(ServerChunkCache chunkCache, int chunkX, int chunkZ) {
-        ChunkHolder chunkHolder = chunkCache.getVisibleChunkIfPresent(ChunkPos.asLong(chunkX, chunkZ));
+        ChunkHolder chunkHolder = chunkCache.getVisibleChunkIfPresent(ChunkPos.pack(chunkX, chunkZ));
         if (chunkHolder != null) {
             ChunkAccess chunkAccess = chunkHolder.getLatestChunk();
             if (chunkAccess != null) {

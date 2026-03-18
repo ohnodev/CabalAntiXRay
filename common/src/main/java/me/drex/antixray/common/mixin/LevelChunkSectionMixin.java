@@ -24,27 +24,17 @@ public abstract class LevelChunkSectionMixin {
         )
     )
     public PalettedContainer<BlockState> setPresetValuesArgument(PalettedContainerFactory instance, Operation<PalettedContainer<BlockState>> original) {
-        if (((Object) this).getClass() != LevelChunkSection.class) {
-            // Compatibility with Flywheel's VirtualChunkSection
-            return original.call(instance);
-        }
-        // custom arguments
-        ChunkAccess chunkAccess = Arguments.CHUNK_ACCESS.get();
-        Integer chunkSectionIndex = Arguments.CHUNK_SECTION_INDEX.get();
-
-        Level level = Util.getLevel(chunkAccess.levelHeightAccessor);
-        ChunkPacketBlockController controller = Util.getBlockController(level);
-        if (controller != null) {
-            final BlockState[] presetValues = controller.getPresetBlockStates(level, chunkSectionIndex << 4);
-            var previous = Arguments.PRESET_VALUES.get();
-            Arguments.PRESET_VALUES.set(presetValues);
-            try {
-                return original.call(instance);
-            } finally {
-                Arguments.PRESET_VALUES.set(previous);
+        BlockState[] presetValues = null;
+        if (Arguments.CHUNK_ACCESS.isBound() && Arguments.CHUNK_SECTION_INDEX.isBound()) {
+            ChunkAccess chunkAccess = Arguments.CHUNK_ACCESS.get();
+            Integer chunkSectionIndex = Arguments.CHUNK_SECTION_INDEX.get();
+            Level level = Util.getLevel(chunkAccess.levelHeightAccessor);
+            ChunkPacketBlockController controller = Util.getBlockController(level);
+            if (controller != null) {
+                presetValues = controller.getPresetBlockStates(level, chunkSectionIndex << 4);
             }
         }
-        return original.call(instance);
+        return ScopedValue.where(Arguments.PRESET_VALUES, presetValues).call(() -> original.call(instance));
     }
 
     @WrapOperation(
@@ -55,13 +45,7 @@ public abstract class LevelChunkSectionMixin {
         )
     )
     public PalettedContainer<Holder<Biome>> setPacketInfoArgumentNull(PalettedContainerFactory instance, Operation<PalettedContainer<Holder<Biome>>> original) {
-        var previous = Arguments.PACKET_INFO.get();
-        Arguments.PACKET_INFO.remove();
-        try {
-            return original.call(instance);
-        } finally {
-            Arguments.PACKET_INFO.set(previous);
-        }
+        return ScopedValue.where(Arguments.PACKET_INFO, null).where(Arguments.PRESET_VALUES, null).call(() -> original.call(instance));
     }
 
     @WrapOperation(
@@ -72,12 +56,6 @@ public abstract class LevelChunkSectionMixin {
         )
     )
     public void setPacketInfoArgumentNull(PalettedContainerRO<Holder<Biome>> instance, FriendlyByteBuf buf, Operation<Void> original) {
-        var previous = Arguments.PACKET_INFO.get();
-        Arguments.PACKET_INFO.remove();
-        try {
-            original.call(instance, buf);
-        } finally {
-            Arguments.PACKET_INFO.set(previous);
-        }
+        ScopedValue.where(Arguments.PACKET_INFO, null).run(() -> original.call(instance, buf));
     }
 }

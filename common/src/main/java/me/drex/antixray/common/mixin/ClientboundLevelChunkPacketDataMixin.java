@@ -32,10 +32,8 @@ public abstract class ClientboundLevelChunkPacketDataMixin {
         )
     )
     private void setChunkPacketInfoBuffer(LevelChunk levelChunk, CallbackInfo ci) {
-        // custom arguments
-        ChunkPacketInfo<BlockState> chunkPacketInfo = Arguments.PACKET_INFO.get();
-
-        if (chunkPacketInfo != null) {
+        if (Arguments.PACKET_INFO.isBound()) {
+            ChunkPacketInfo<BlockState> chunkPacketInfo = Arguments.PACKET_INFO.get();
             chunkPacketInfo.setBuffer(this.buffer);
         }
     }
@@ -55,13 +53,7 @@ public abstract class ClientboundLevelChunkPacketDataMixin {
     private static void setChunkSectionIndexArgument(LevelChunkSection instance, FriendlyByteBuf friendlyByteBuf, Operation<Void> original, @Share("chunkSectionIndex") LocalIntRef chunkSectionIndexRef) {
         int chunkSectionIndex = chunkSectionIndexRef.get();
 
-        var previous = Arguments.CHUNK_SECTION_INDEX.get();
-        Arguments.CHUNK_SECTION_INDEX.set(chunkSectionIndex);
-        try {
-            original.call(instance, friendlyByteBuf);
-        } finally {
-            Arguments.CHUNK_SECTION_INDEX.set(previous);
-        }
+        ScopedValue.where(Arguments.CHUNK_SECTION_INDEX, chunkSectionIndex).run(() -> original.call(instance, friendlyByteBuf));
 
         chunkSectionIndexRef.set(chunkSectionIndex + 1);
     }

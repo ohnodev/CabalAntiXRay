@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom")
+    id("net.fabricmc.fabric-loom")
     id("org.jetbrains.changelog")
     id("multiloader-common")
 }
@@ -10,9 +10,8 @@ base {
 
 dependencies {
     minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
-    mappings(loom.officialMojangMappings())
 
-    modCompileOnly("net.fabricmc:fabric-loader:${project.property("loader_version")}")
+    compileOnly("net.fabricmc:fabric-loader:${project.property("loader_version")}")
     compileOnly("com.moandjiezana.toml:toml4j:${project.property("toml_version")}")
 }
 
