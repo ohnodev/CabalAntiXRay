@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.15] - 2026-03-25
+### Fixed
+- Crash in disabled dimensions (@KieranBeals)
+
 ## [1.4.14] - 2026-03-12
 ### Changed
 - Multiloader gradle setup
