@@ -2,6 +2,7 @@ package me.drex.antixray.fabric;
 
 import me.drex.antixray.common.AntiXray;
 import me.drex.antixray.common.util.Platform;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -25,7 +26,6 @@ public class AntiXrayFabric extends AntiXray {
 
     @Override
     public boolean hasBypassPermission(ServerPlayer player) {
-        return false;
-//        return Permissions.check(player, "antixray.bypass");
+        return Permissions.check(player, "antixray.bypass");
     }
 }
