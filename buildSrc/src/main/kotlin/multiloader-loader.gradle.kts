@@ -53,7 +53,7 @@ tasks {
         github {
             accessToken.set(providers.environmentVariable("GITHUB_TOKEN"))
             repository.set(providers.environmentVariable("GITHUB_REPOSITORY").orElse("DrexHD/AntiXray"))
-            commitish.set(providers.environmentVariable("GITHUB_REF_NAME").orElse("dryrun"))
+            commitish.set(providers.environmentVariable("GITHUB_REF_NAME").orElse("26.1"))
         }
     }
 }
