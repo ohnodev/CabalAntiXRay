@@ -28,6 +28,10 @@ public class WorldConfig {
     public int maxBlockHeight = 64;
     public int updateRadius = 2;
     public boolean lavaObscures = false;
+    public boolean skipEvokerBossChunks = false;
+    public int evokerBossChunkX = 0;
+    public int evokerBossChunkZ = 0;
+    public int evokerBossChunkRadius = 0;
     public Set<Block> hiddenBlocks = new HashSet<>();
     public Set<Block> replacementBlocks = new HashSet<>();
 
@@ -60,6 +64,10 @@ public class WorldConfig {
         }
         if (toml.contains("updateRadius")) this.updateRadius = Math.toIntExact(toml.getLong("updateRadius"));
         if (toml.contains("lavaObscures")) this.lavaObscures = toml.getBoolean("lavaObscures");
+        if (toml.contains("skipEvokerBossChunks")) this.skipEvokerBossChunks = toml.getBoolean("skipEvokerBossChunks");
+        if (toml.contains("evokerBossChunkX")) this.evokerBossChunkX = Math.toIntExact(toml.getLong("evokerBossChunkX"));
+        if (toml.contains("evokerBossChunkZ")) this.evokerBossChunkZ = Math.toIntExact(toml.getLong("evokerBossChunkZ"));
+        if (toml.contains("evokerBossChunkRadius")) this.evokerBossChunkRadius = Math.max(0, Math.toIntExact(toml.getLong("evokerBossChunkRadius")));
         if (toml.contains("hiddenBlocks")) this.hiddenBlocks = parseBlocks(toml.getList("hiddenBlocks"));
         if (toml.contains("replacementBlocks")) this.replacementBlocks = parseBlocks(toml.getList("replacementBlocks"));
 
@@ -109,11 +117,14 @@ public class WorldConfig {
         if (!this.enabled) return DisabledChunkPacketBlockController.NO_OPERATION_INSTANCE;
         return switch (engineMode) {
             case HIDE ->
-                new HideChunkPacketBlockController(level, hiddenBlocks, maxBlockHeight, updateRadius, lavaObscures, usePermission);
+                new HideChunkPacketBlockController(level, hiddenBlocks, maxBlockHeight, updateRadius, lavaObscures, usePermission,
+                    skipEvokerBossChunks, evokerBossChunkX, evokerBossChunkZ, evokerBossChunkRadius);
             case OBFUSCATE ->
-                new ObfuscateChunkPacketBlockController(level, replacementBlocks, hiddenBlocks, maxBlockHeight, updateRadius, lavaObscures, usePermission);
+                new ObfuscateChunkPacketBlockController(level, replacementBlocks, hiddenBlocks, maxBlockHeight, updateRadius, lavaObscures, usePermission,
+                    skipEvokerBossChunks, evokerBossChunkX, evokerBossChunkZ, evokerBossChunkRadius);
             case OBFUSCATE_LAYER ->
-                new ObfuscateLayerChunkPacketBlockController(level, replacementBlocks, hiddenBlocks, maxBlockHeight, updateRadius, lavaObscures, usePermission);
+                new ObfuscateLayerChunkPacketBlockController(level, replacementBlocks, hiddenBlocks, maxBlockHeight, updateRadius, lavaObscures, usePermission,
+                    skipEvokerBossChunks, evokerBossChunkX, evokerBossChunkZ, evokerBossChunkRadius);
         };
     }
 

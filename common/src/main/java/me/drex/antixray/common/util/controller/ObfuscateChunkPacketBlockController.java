@@ -17,8 +17,10 @@ public class ObfuscateChunkPacketBlockController extends ChunkPacketBlockControl
     private final BlockState[] presetBlockStates;
     private final int[] presetBlockStateBitsGlobal;
 
-    public ObfuscateChunkPacketBlockController(Level level, Set<Block> replacementBlocks, Set<Block> hiddenBlocks, int maxBlockHeight, int updateRadius, boolean lavaObscures, boolean usePermission) {
-        super(level, Stream.concat(replacementBlocks.stream(), hiddenBlocks.stream()).collect(Collectors.toSet()), maxBlockHeight, updateRadius, lavaObscures, usePermission);
+    public ObfuscateChunkPacketBlockController(Level level, Set<Block> replacementBlocks, Set<Block> hiddenBlocks, int maxBlockHeight, int updateRadius, boolean lavaObscures, boolean usePermission,
+                                               boolean skipEvokerBossChunks, int evokerBossChunkX, int evokerBossChunkZ, int evokerBossChunkRadius) {
+        super(level, Stream.concat(replacementBlocks.stream(), hiddenBlocks.stream()).collect(Collectors.toSet()), maxBlockHeight, updateRadius, lavaObscures, usePermission,
+            skipEvokerBossChunks, evokerBossChunkX, evokerBossChunkZ, evokerBossChunkRadius);
 
         Set<BlockState> presetBlockStateSet = new LinkedHashSet<>();
         for (Block block : hiddenBlocks) {

@@ -54,9 +54,19 @@ engineMode = 3
 maxBlockHeight = 256
 updateRadius = 2
 lavaObscures = false
+skipEvokerBossChunks = true
+evokerBossChunkX = 0
+evokerBossChunkZ = 0
+evokerBossChunkRadius = 4
 hiddenBlocks = ["#c:ores", "raw_copper_block", "raw_iron_block", "raw_gold_block", "!#antixray:hidden_only_ores"]
 replacementBlocks = ["#antixray:hidden_only_ores", "stone", "deepslate", "andesite", "calcite", "diorite", "dirt", "granite", "gravel", "sand", "tuff", "mossy_cobblestone", "obsidian", "clay", "infested_stone", "amethyst_block", "budding_amethyst", "chest"]
 ```
+
+Evoker chunk exclusion options:
+
+- `skipEvokerBossChunks`: enable/disable the exclusion gate.
+- `evokerBossChunkX` / `evokerBossChunkZ`: center chunk of the excluded area.
+- `evokerBossChunkRadius`: square radius in chunk units (Chebyshev distance).
 
 Engine mode summary:
 
