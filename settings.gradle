@@ -21,4 +21,5 @@ plugins {
 
 include("common")
 include("fabric")
-include("neoforge")
+// CabalAntiXRay ships Fabric-only artifacts by default.
+// Keeping neoforge sources in-tree for reference, but excluded from default build graph.

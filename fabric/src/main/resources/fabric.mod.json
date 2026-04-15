@@ -2,13 +2,14 @@
   "schemaVersion": 1,
   "id": "antixray",
   "version": "${modVersion}",
-  "name": "AntiXray",
-  "description": "This mod implements Papers 0367-Anti-Xray.patch!",
+  "name": "CabalAntiXRay",
+  "description": "Fabric-only, performance-oriented anti-xray for Cabal servers.",
   "authors": [
-    "Drex"
+    "Drex",
+    "ohnodev"
   ],
   "contact": {
-    "sources": "https://github.com/DrexHD/AntiXray"
+    "sources": "https://github.com/ohnodev/CabalAntiXRay"
   },
   "license": "MIT",
   "environment": "*",
