@@ -63,7 +63,7 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
         this.skipEvokerBossChunks = skipEvokerBossChunks;
         this.evokerBossChunkX = evokerBossChunkX;
         this.evokerBossChunkZ = evokerBossChunkZ;
-        this.evokerBossChunkRadius = Math.max(0, evokerBossChunkRadius);
+        this.evokerBossChunkRadius = evokerBossChunkRadius;
 
         for (Block block : toObfuscate) {
             // Don't obfuscate air because air causes unnecessary block updates and causes block updates to fail in the void
@@ -136,7 +136,7 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
     }
 
     private boolean shouldSkipChunk(int chunkX, int chunkZ) {
-        if (!skipEvokerBossChunks || evokerBossChunkRadius <= 0) {
+        if (!skipEvokerBossChunks || evokerBossChunkRadius < 0) {
             return false;
         }
         return Math.abs(chunkX - evokerBossChunkX) <= evokerBossChunkRadius
