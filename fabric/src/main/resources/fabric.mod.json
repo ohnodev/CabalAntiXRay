@@ -3,7 +3,7 @@
   "id": "antixray",
   "version": "${modVersion}",
   "name": "CabalAntiXRay",
-  "description": "Fabric-only, performance-oriented anti-xray for Cabal servers.",
+  "description": "Fabric-only, performance-oriented anti-xray for Cabal servers. Targets Minecraft 26.2-snapshot-3.",
   "authors": [
     "Drex",
     "ohnodev"
@@ -24,7 +24,9 @@
   ],
   "accessWidener": "antixray.accesswidener",
   "depends": {
-    "fabricloader": ">=0.18.4",
+    "fabricloader": ">=0.19.1",
+    "fabric-api": ">=0.145.5",
+    "minecraft": "26.2-snapshot-3",
     "java": ">=25"
   }
 }

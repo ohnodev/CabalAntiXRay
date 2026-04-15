@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.17] - 2026-04-15
+### Changed
+- Target **Minecraft 26.2-snapshot-3**, Fabric Loader **0.19.1**, Fabric API **0.145.5+26.2**; pin Loom **1.15.5**; exclude `fabric-data-generation-api-v1` from the API bundle so Loom can remap (TagAppender / snapshot quirk).
+- Publish and CI tasks build **Fabric only** (`:fabric:build`); NeoForge/MavenForge repos removed from default settings.
+- Mod metadata and docs now state the 26.2 snapshot baseline and **CabalAntiXRay** display name for releases.
+
 ## [1.4.16] - 2026-03-27
 ### Changed
 - Add back bypass permission checks on fabric (was removed during porting)

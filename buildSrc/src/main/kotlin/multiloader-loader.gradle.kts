@@ -36,7 +36,7 @@ tasks {
 
     publishMods {
         type.set(STABLE)
-        displayName.set("AntiXray ${version.get()}")
+        displayName.set("CabalAntiXRay ${version.get()}")
         changelog.set(provider { fetchChangelog() })
 
         curseforge {
@@ -53,7 +53,7 @@ tasks {
         github {
             accessToken.set(providers.environmentVariable("GITHUB_TOKEN"))
             repository.set(providers.environmentVariable("GITHUB_REPOSITORY").orElse("DrexHD/AntiXray"))
-            commitish.set(providers.environmentVariable("GITHUB_REF_NAME").orElse("26.1"))
+            commitish.set(providers.environmentVariable("GITHUB_REF_NAME").orElse("main"))
         }
     }
 }
