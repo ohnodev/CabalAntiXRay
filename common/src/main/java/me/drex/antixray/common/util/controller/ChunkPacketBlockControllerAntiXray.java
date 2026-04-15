@@ -44,6 +44,10 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
     private final int maxBlockHeightUpdatePosition;
     private final int updateRadius;
     private final boolean usePermission;
+    private final boolean skipEvokerBossChunks;
+    private final int evokerBossChunkX;
+    private final int evokerBossChunkZ;
+    private final int evokerBossChunkRadius;
     private final Object2BooleanOpenHashMap<BlockState> solidGlobal = new Object2BooleanOpenHashMap<>(Block.BLOCK_STATE_REGISTRY.size());
     private final Object2BooleanOpenHashMap<BlockState> obfuscateGlobal = new Object2BooleanOpenHashMap<>(Block.BLOCK_STATE_REGISTRY.size());
     private final LevelChunkSection[] emptyNearbyChunkSections = {EMPTY_SECTION, EMPTY_SECTION, EMPTY_SECTION, EMPTY_SECTION};
@@ -51,10 +55,15 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
     // If an ExecutorService with multiple threads is used, ThreadLocal must be used here
     private final ThreadLocal<int[]> presetBlockStateBits = ThreadLocal.withInitial(() -> new int[getPresetBlockStatesLength()]);
 
-    protected ChunkPacketBlockControllerAntiXray(Level level, Set<Block> toObfuscate, int maxBlockHeight, int updateRadius, boolean lavaObscures, boolean usePermission) {
+    protected ChunkPacketBlockControllerAntiXray(Level level, Set<Block> toObfuscate, int maxBlockHeight, int updateRadius, boolean lavaObscures, boolean usePermission,
+                                                 boolean skipEvokerBossChunks, int evokerBossChunkX, int evokerBossChunkZ, int evokerBossChunkRadius) {
         this.maxBlockHeight = maxBlockHeight;
         this.updateRadius = updateRadius;
         this.usePermission = usePermission;
+        this.skipEvokerBossChunks = skipEvokerBossChunks;
+        this.evokerBossChunkX = evokerBossChunkX;
+        this.evokerBossChunkZ = evokerBossChunkZ;
+        this.evokerBossChunkRadius = Math.max(0, evokerBossChunkRadius);
 
         for (Block block : toObfuscate) {
             // Don't obfuscate air because air causes unnecessary block updates and causes block updates to fail in the void
@@ -112,6 +121,10 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
         LevelChunk chunk = chunkPacketInfo.getChunk();
         int x = chunk.getPos().x();
         int z = chunk.getPos().z();
+        if (shouldSkipChunk(x, z)) {
+            ((IChunkPacket) chunkPacket).antixray$setReady(true);
+            return;
+        }
         ServerChunkCache chunkCache = ((ServerLevel) chunk.getLevel()).getChunkSource();
         antiXrayInfo.setNearbyChunks(
             getChunkAccess(chunkCache, x - 1, z),
@@ -120,6 +133,14 @@ public abstract class ChunkPacketBlockControllerAntiXray implements ChunkPacketB
             getChunkAccess(chunkCache, x, z + 1)
         );
         Util.backgroundExecutor().execute((Runnable) chunkPacketInfo);
+    }
+
+    private boolean shouldSkipChunk(int chunkX, int chunkZ) {
+        if (!skipEvokerBossChunks || evokerBossChunkRadius <= 0) {
+            return false;
+        }
+        return Math.abs(chunkX - evokerBossChunkX) <= evokerBossChunkRadius
+            && Math.abs(chunkZ - evokerBossChunkZ) <= evokerBossChunkRadius;
     }
 
     private ChunkAccess getChunkAccess(ServerChunkCache chunkCache, int chunkX, int chunkZ) {

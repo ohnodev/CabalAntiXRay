@@ -20,8 +20,10 @@ public class HideChunkPacketBlockController extends ChunkPacketBlockControllerAn
     private final int[] presetBlockStateBitsNetherrackGlobal;
     private final int[] presetBlockStateBitsEndStoneGlobal;
 
-    public HideChunkPacketBlockController(Level level, Set<Block> toObfuscate, int maxBlockHeight, int updateRadius, boolean lavaObscures, boolean usePermission) {
-        super(level, toObfuscate, maxBlockHeight, updateRadius, lavaObscures, usePermission);
+    public HideChunkPacketBlockController(Level level, Set<Block> toObfuscate, int maxBlockHeight, int updateRadius, boolean lavaObscures, boolean usePermission,
+                                          boolean skipEvokerBossChunks, int evokerBossChunkX, int evokerBossChunkZ, int evokerBossChunkRadius) {
+        super(level, toObfuscate, maxBlockHeight, updateRadius, lavaObscures, usePermission,
+            skipEvokerBossChunks, evokerBossChunkX, evokerBossChunkZ, evokerBossChunkRadius);
         presetBlockStatesStone = new BlockState[]{Blocks.STONE.defaultBlockState()};
         presetBlockStatesDeepslate = new BlockState[]{Blocks.DEEPSLATE.defaultBlockState()};
         presetBlockStatesNetherrack = new BlockState[]{Blocks.NETHERRACK.defaultBlockState()};
