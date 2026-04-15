@@ -19,7 +19,10 @@ dependencies {
 
     implementation(include("com.moandjiezana.toml:toml4j:${project.property("toml_version")}")!!)
     implementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
-    implementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_api_version")}")
+    implementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_api_version")}") {
+        // TagAppender interface injection in this module can break Loom on 26.2-snapshot-3 (see cabal-mobs).
+        exclude(group = "net.fabricmc.fabric-api", module = "fabric-data-generation-api-v1")
+    }
     implementation(include("me.lucko:fabric-permissions-api:${project.property("fabric_permission_api_version")}")!!)
 //    compileOnly("com.github.iPortalTeam:ImmersivePortalsMod:${project.property("fabric_imm_ptl_core_version")}") {
 //        exclude(group = "net.fabricmc.fabric-api")
@@ -38,7 +41,7 @@ loom {
 publishMods {
     file.set(tasks.jar.get().archiveFile)
 
-    displayName.set("AntiXray ${version.get()}")
+    displayName.set("CabalAntiXRay ${version.get()}")
     modLoaders.addAll("fabric", "quilt")
 
     curseforge {

@@ -19,6 +19,8 @@ CabalAntiXRay is a Fabric-only, performance-oriented anti-xray fork for Cabal se
 It starts from DrexHD's AntiXray implementation and keeps the proven packet obfuscation model,
 while focusing on operational stability for always-on survival servers.
 
+**Current game target:** Minecraft **26.2-snapshot-3** (align with Cabal production Fabric stack).
+
 ## Goals
 
 - Keep anti-xray effective without introducing server tick stalls.
@@ -34,8 +36,8 @@ while focusing on operational stability for always-on survival servers.
 ## Requirements
 
 - Java 25+
-- Fabric Loader 0.18.4+
-- Minecraft 26.1 line (current base branch)
+- Fabric Loader 0.19.1+
+- Minecraft **26.2-snapshot-3** (use the Fabric API build that matches this snapshot, e.g. `0.145.5+26.2`)
 
 ## Configuration
 
@@ -77,6 +79,7 @@ Build artifact:
 ## Scope
 
 - Fabric only.
+- NeoForge support is intentionally out of scope.
 - Single purpose: chunk/block obfuscation for anti-xray.
 - No gameplay rewrites, no protocol translation, no anticheat replacement.
 
